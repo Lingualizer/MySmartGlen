@@ -1,0 +1,365 @@
+<title>Lüftersteuerung Schaltplan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#eef1ee;
+    --surface:#ffffff;
+    --surface-2:#e3e9e5;
+    --ink:#151d1a;
+    --muted:#57655f;
+    --accent:#b5581a;
+    --accent-2:#8a4212;
+    --border:#d3dbd6;
+    --font-display:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12140f;
+      --surface:#1a1e19;
+      --surface-2:#222720;
+      --ink:#e9ede8;
+      --muted:#94a099;
+      --accent:#e2853f;
+      --accent-2:#f2a565;
+      --border:#333a33;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12140f;
+    --surface:#1a1e19;
+    --surface-2:#222720;
+    --ink:#e9ede8;
+    --muted:#94a099;
+    --accent:#e2853f;
+    --accent-2:#f2a565;
+    --border:#333a33;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    margin:0;
+    font-family:var(--font-display);
+  }
+  .page{
+    max-width:920px;
+    margin:0 auto;
+    padding:48px 24px 64px;
+    display:flex;
+    flex-direction:column;
+    gap:36px;
+  }
+  header{display:flex;flex-direction:column;gap:8px;}
+  .eyebrow{
+    margin:0;
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--accent-2);
+  }
+  h1{
+    margin:0;
+    font-size:clamp(24px,4vw,32px);
+    font-weight:700;
+    letter-spacing:-.01em;
+    text-wrap:balance;
+  }
+  .lede{
+    margin:0;
+    max-width:62ch;
+    font-size:15px;
+    line-height:1.55;
+    color:var(--muted);
+  }
+
+  figure.schematic{
+    margin:0;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 20px 16px;
+  }
+  figure.schematic svg{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+  figcaption{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid var(--border);
+    font-size:13px;
+    line-height:1.55;
+    color:var(--muted);
+  }
+  figcaption .power{color:var(--accent-2);font-weight:600;}
+  figcaption .logic{color:var(--ink);font-weight:600;}
+
+  .comp-box{fill:var(--surface);stroke:var(--ink);stroke-width:2;}
+  .comp-outline{fill:var(--surface);stroke:var(--ink);stroke-width:2;}
+  .comp-title{font-family:var(--font-display);font-weight:700;font-size:17px;fill:var(--ink);}
+  .comp-sub{font-family:var(--font-mono);font-size:10.5px;fill:var(--muted);}
+  .pin-label{font-family:var(--font-mono);font-size:11.5px;fill:var(--ink);}
+  .val-label{font-family:var(--font-mono);font-size:12px;fill:var(--ink);}
+  .val-label.muted{fill:var(--muted);font-size:10.5px;}
+  .net-label{font-family:var(--font-mono);font-size:12px;font-weight:600;}
+
+  .wire-logic{stroke:var(--ink);stroke-width:1.75;fill:none;}
+  .wire-power{stroke:var(--accent);stroke-width:2.25;fill:none;}
+  .wire-gnd{stroke:var(--ink);stroke-width:2.5;fill:none;}
+  .rail-logic{stroke:var(--ink);stroke-width:2;fill:none;}
+  .rail-power{stroke:var(--accent);stroke-width:2.5;fill:none;}
+  .rail-gnd{stroke:var(--ink);stroke-width:2.75;fill:none;}
+  .joint{fill:var(--ink);stroke:none;}
+  .joint.power{fill:var(--accent);}
+  .terminal{fill:var(--surface);stroke:var(--ink);stroke-width:2;}
+  .fan-blade{stroke:var(--ink);stroke-width:1.5;}
+
+  section.bom h2, aside.callout h2{
+    margin:0 0 12px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  .bom-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px;}
+  th,td{
+    text-align:left;
+    padding:9px 14px;
+    border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+  th{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    background:var(--surface-2);
+  }
+  tr:last-child td{border-bottom:none;}
+  td.mono, th.mono{font-family:var(--font-mono);}
+
+  aside.callout{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-left:3px solid var(--accent);
+    border-radius:8px;
+    padding:18px 20px;
+  }
+  aside.callout ul{
+    margin:0;
+    padding-left:18px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    font-size:14px;
+    line-height:1.5;
+  }
+  aside.callout li::marker{color:var(--accent-2);}
+  .flag{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--accent-2);
+  }
+</style>
+
+<main class="page">
+
+  <header>
+    <p class="eyebrow">Glen · Lüftersteuerung</p>
+    <h1>Verkabelung Abluftlüfter</h1>
+    <p class="lede">ESP32-Node schaltet den 12V-Lüfter über einen BC337-Transistor, gesteuert durch die SHT31-Temperaturmessung (I²C). Hysterese: EIN ≥45°C, AUS ≤35°C.</p>
+  </header>
+
+  <figure class="schematic">
+    <svg viewBox="0 0 1080 800" role="img" aria-label="Schaltplan: ESP32 misst die Ablufttemperatur über den I2C-Sensor SHT31 und schaltet über einen BC337-Transistor einen 12-Volt-Lüfter im Bordnetz-Stromkreis, abgesichert durch eine Freilaufdiode.">
+
+      <!-- ================= 3,3V LOGIK-BEREICH ================= -->
+      <text x="300" y="50" class="net-label" fill="var(--ink)">+3,3V</text>
+      <line x1="300" y1="70" x2="470" y2="70" class="rail-logic"/>
+      <circle cx="395" cy="70" r="3.5" class="joint"/>
+      <circle cx="430" cy="70" r="3.5" class="joint"/>
+
+      <!-- Pull-up R2 (SCL, 4,7k) auf Spalte x=395 -->
+      <line x1="395" y1="70" x2="395" y2="444" class="wire-logic"/>
+      <rect x="388" y="160" width="14" height="40" class="comp-outline"/>
+      <text x="378" y="184" class="val-label" text-anchor="end">4,7 kΩ</text>
+      <circle cx="395" cy="274" r="3.5" class="joint"/>
+      <line x1="395" y1="274" x2="500" y2="274" class="wire-logic"/>
+
+      <!-- Pull-up R1 (SDA, 4,7k) auf Spalte x=430 -->
+      <line x1="430" y1="70" x2="430" y2="406" class="wire-logic"/>
+      <rect x="423" y="110" width="14" height="40" class="comp-outline"/>
+      <text x="445" y="134" class="val-label">4,7 kΩ</text>
+      <circle cx="430" cy="242" r="3.5" class="joint"/>
+      <line x1="430" y1="242" x2="500" y2="242" class="wire-logic"/>
+
+      <!-- VIN direkt an Rail -->
+      <line x1="470" y1="70" x2="470" y2="210" class="wire-logic"/>
+      <line x1="470" y1="210" x2="500" y2="210" class="wire-logic"/>
+
+      <!-- ESP32-Node -->
+      <rect x="60" y="260" width="200" height="300" rx="10" class="comp-box"/>
+      <text x="160" y="292" text-anchor="middle" class="comp-title">ESP32</text>
+      <text x="160" y="309" text-anchor="middle" class="comp-sub">Lüfter-Node</text>
+
+      <line x1="260" y1="330" x2="300" y2="330" class="wire-logic"/>
+      <line x1="300" y1="330" x2="300" y2="70" class="wire-logic"/>
+      <text x="250" y="325" text-anchor="end" class="pin-label">3V3</text>
+
+      <line x1="260" y1="368" x2="270" y2="368" class="wire-gnd"/>
+      <line x1="270" y1="368" x2="270" y2="720" class="wire-gnd"/>
+      <text x="250" y="363" text-anchor="end" class="pin-label">GND</text>
+
+      <line x1="260" y1="406" x2="430" y2="406" class="wire-logic"/>
+      <text x="250" y="401" text-anchor="end" class="pin-label">GPIO21 · SDA</text>
+
+      <line x1="260" y1="444" x2="395" y2="444" class="wire-logic"/>
+      <text x="250" y="439" text-anchor="end" class="pin-label">GPIO22 · SCL</text>
+
+      <line x1="260" y1="482" x2="460" y2="482" class="wire-power"/>
+      <text x="250" y="477" text-anchor="end" class="pin-label">GPIO5 · FAN</text>
+
+      <line x1="260" y1="520" x2="290" y2="520" class="wire-power"/>
+      <line x1="290" y1="520" x2="290" y2="612" class="wire-power"/>
+      <line x1="290" y1="612" x2="300" y2="612" class="wire-power"/>
+      <text x="250" y="515" text-anchor="end" class="pin-label">5V · VIN</text>
+
+      <!-- SHT31 -->
+      <rect x="500" y="140" width="160" height="180" rx="10" class="comp-box"/>
+      <text x="580" y="168" text-anchor="middle" class="comp-title">SHT31</text>
+      <text x="580" y="185" text-anchor="middle" class="comp-sub">I²C-Sensor</text>
+      <text x="510" y="214" class="pin-label">VIN · 3V3</text>
+      <text x="510" y="246" class="pin-label">SDA</text>
+      <text x="510" y="278" class="pin-label">SCL</text>
+      <text x="510" y="310" class="pin-label">GND</text>
+
+      <!-- SHT31 GND -->
+      <line x1="500" y1="306" x2="480" y2="306" class="wire-gnd"/>
+      <line x1="480" y1="306" x2="480" y2="720" class="wire-gnd"/>
+
+      <!-- ================= BASIS-VORWIDERSTAND ================= -->
+      <rect x="350" y="472" width="60" height="20" class="comp-outline"/>
+      <text x="380" y="466" text-anchor="middle" class="val-label">1 kΩ</text>
+      <line x1="460" y1="482" x2="460" y2="560" class="wire-power"/>
+      <line x1="460" y1="560" x2="488" y2="560" class="wire-power"/>
+
+      <!-- ================= TRANSISTOR BC337 ================= -->
+      <circle cx="520" cy="560" r="32" class="comp-outline"/>
+      <text x="520" y="504" text-anchor="middle" class="val-label">BC337 (NPN)</text>
+      <text x="473" y="552" text-anchor="end" class="val-label muted">B</text>
+      <text x="533" y="472" class="val-label muted">C</text>
+      <text x="533" y="655" class="val-label muted">E</text>
+
+      <line x1="520" y1="528" x2="520" y2="460" class="wire-power"/>
+      <line x1="520" y1="592" x2="520" y2="720" class="wire-gnd"/>
+      <polygon points="511,602 529,602 520,616" fill="var(--ink)"/>
+
+      <!-- Switch-Node (Kollektor -> Lüfter-/Diode) -->
+      <line x1="520" y1="460" x2="880" y2="460" class="wire-power"/>
+      <circle cx="740" cy="460" r="3.5" class="joint power"/>
+
+      <!-- ================= LÜFTER ================= -->
+      <circle cx="740" cy="410" r="38" class="comp-outline"/>
+      <circle cx="740" cy="410" r="3" fill="var(--ink)"/>
+      <line x1="740" y1="410" x2="754" y2="396" class="fan-blade"/>
+      <line x1="740" y1="410" x2="754" y2="424" class="fan-blade"/>
+      <line x1="740" y1="410" x2="726" y2="424" class="fan-blade"/>
+      <line x1="740" y1="410" x2="726" y2="396" class="fan-blade"/>
+      <line x1="740" y1="372" x2="740" y2="350" class="wire-power"/>
+      <line x1="740" y1="448" x2="740" y2="460" class="wire-power"/>
+      <text x="787" y="405" class="val-label">Lüfter</text>
+      <text x="787" y="420" class="val-label muted">12V · 1,68W (~140mA)</text>
+
+      <!-- ================= FREILAUFDIODE 1N4007 ================= -->
+      <line x1="880" y1="430" x2="880" y2="460" class="wire-power"/>
+      <polygon points="865,430 895,430 880,402" class="comp-outline"/>
+      <line x1="866" y1="398" x2="894" y2="398" stroke="var(--ink)" stroke-width="2.5"/>
+      <line x1="880" y1="398" x2="880" y2="350" class="wire-power"/>
+      <text x="905" y="414" class="val-label">1N4007</text>
+      <text x="905" y="428" class="val-label muted">Freilaufdiode</text>
+
+      <!-- ================= +12V BORDNETZ ================= -->
+      <text x="630" y="332" class="net-label" fill="var(--accent-2)">+12V Bordnetz</text>
+      <line x1="620" y1="350" x2="880" y2="350" class="rail-power"/>
+      <circle cx="620" cy="350" r="5" class="terminal"/>
+      <circle cx="705" cy="350" r="3.5" class="joint power"/>
+      <circle cx="740" cy="350" r="3.5" class="joint power"/>
+      <rect x="660" y="342" width="40" height="16" class="comp-outline"/>
+      <text x="680" y="378" text-anchor="middle" class="val-label muted">Sicherung</text>
+
+      <!-- ================= ESP32-STROMVERSORGUNG (12V -> 5V) ================= -->
+      <line x1="705" y1="350" x2="705" y2="368" class="wire-power"/>
+      <line x1="705" y1="368" x2="450" y2="368" class="wire-power"/>
+      <line x1="450" y1="368" x2="450" y2="612" class="wire-power"/>
+      <line x1="450" y1="612" x2="440" y2="612" class="wire-power"/>
+
+      <rect x="300" y="550" width="140" height="80" rx="8" class="comp-outline"/>
+      <text x="370" y="574" text-anchor="middle" class="comp-title" style="font-size:13px;">Step-Down</text>
+      <text x="370" y="590" text-anchor="middle" class="comp-sub">12V → 5V</text>
+
+      <line x1="370" y1="630" x2="370" y2="720" class="wire-gnd"/>
+      <circle cx="370" cy="720" r="3.5" class="joint"/>
+
+      <!-- ================= GND-BUS ================= -->
+      <line x1="270" y1="720" x2="1000" y2="720" class="rail-gnd"/>
+      <circle cx="480" cy="720" r="3.5" class="joint"/>
+      <circle cx="520" cy="720" r="3.5" class="joint"/>
+      <circle cx="1000" cy="720" r="5" class="terminal"/>
+      <text x="270" y="742" class="net-label" fill="var(--ink)">GND — gemeinsame Masse</text>
+      <text x="995" y="700" text-anchor="end" class="val-label muted">12V– Bordnetz</text>
+
+    </svg>
+    <figcaption>
+      <span class="logic">Dunkler Pfad</span>: 3,3V-Logik &amp; I²C-Sensor (SHT31). <span class="power">Kupferfarbener Pfad</span>: alles vom 12V-Bordnetz versorgt — geschalteter Lüfterkreis und die eigene Stromversorgung des ESP32 über einen Step-Down-Wandler (12V→5V, an VIN). Beide Bereiche teilen sich eine gemeinsame Masse (GND-Bus unten).
+    </figcaption>
+  </figure>
+
+  <section class="bom">
+    <h2>Stückliste</h2>
+    <div class="bom-wrap">
+      <table>
+        <thead>
+          <tr><th>Bauteil</th><th>Wert / Typ</th><th class="mono">Menge</th><th>Verbindung</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>R1</td><td class="mono">4,7 kΩ</td><td class="mono">1×</td><td>SDA → 3,3V (Pull-up)</td></tr>
+          <tr><td>R2</td><td class="mono">4,7 kΩ</td><td class="mono">1×</td><td>SCL → 3,3V (Pull-up)</td></tr>
+          <tr><td>R3</td><td class="mono">1 kΩ</td><td class="mono">1×</td><td>GPIO5 → Basis BC337</td></tr>
+          <tr><td>Q1</td><td class="mono">BC337 (NPN)</td><td class="mono">1×</td><td>Schalter für Lüfter</td></tr>
+          <tr><td>D1</td><td class="mono">1N4007</td><td class="mono">1×</td><td>Freilaufdiode, parallel zum Lüfter</td></tr>
+          <tr><td>—</td><td class="mono">SHT31</td><td class="mono">1×</td><td>Abluft-Temperatur/-Feuchte, I²C</td></tr>
+          <tr><td>—</td><td class="mono">Lüfter 12V</td><td class="mono">1×</td><td>1,68W, ~140mA</td></tr>
+          <tr><td>—</td><td class="mono">DC/DC Step-Down 12V→5V</td><td class="mono">1×</td><td>ESP32-Stromversorgung (VIN/5V)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <aside class="callout">
+    <h2>Wichtig</h2>
+    <ul>
+      <li><strong>Gemeinsame Masse zwingend:</strong> ESP32-GND und Bordnetz-Minus müssen verbunden sein, sonst schaltet der Transistor nicht sauber.</li>
+      <li><strong>Freilaufdiode nicht optional:</strong> Lüfter ist eine induktive Last — ohne Diode zerstört die Abschaltspannung den Transistor.</li>
+      <li><strong>Sicherung im 12V-Pluspfad</strong> vorsehen, nicht nur den Lüfterkreis unabgesichert an den Bordnetz-Plus hängen.</li>
+      <li><span class="flag">Annahme</span> — 12V-Bordnetzspannung zugrunde gelegt; nicht explizit bestätigt.</li>
+      <li><span class="flag">Zu klären</span> — genaue Pin-Bezeichnung für die Spannungsversorgung (VIN/5V/USB) hängt vom konkreten ESP32-Board ab; Step-Down-Wandler sollte für mind. 500mA ausgelegt sein.</li>
+    </ul>
+  </aside>
+
+</main>

@@ -1,0 +1,37 @@
+{
+	"folders": [
+		{
+			"name": "Components",
+			"path": "Components"
+		},
+		{
+			"name": "Display",
+			"path": "Display"
+		},
+		{
+			"name": "KS Abluft",
+			"path": "KS Abluft"
+		},
+		{
+			"name": "Frischwasser",
+			"path": "Frischwasser"
+		},
+		{
+			"name": "PipiTank",
+			"path": "PipiTank"
+		},
+		{
+			"name": "RT-H",
+			"path": "RT-H"
+		},
+		{
+			"name": "VE.Direct Shunt",
+			"path": "VE.Direct Shunt"
+		},
+		{
+			"name": "VE.Direkt Solar",
+			"path": "VE.Direkt Solar"
+		}
+	],
+	"settings": {}
+}
