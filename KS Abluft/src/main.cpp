@@ -127,22 +127,26 @@ void handleStatus() {
 // Aufruf zum Ändern: /config?temp_on=45.0&temp_off=35.0
 void handleConfig() {
   bool changed = false;
+  float newTempOn = tempOn;
+  float newTempOff = tempOff;
 
   if (server.hasArg("temp_on")) {
-    tempOn = server.arg("temp_on").toFloat();
+    newTempOn = server.arg("temp_on").toFloat();
     changed = true;
   }
   if (server.hasArg("temp_off")) {
-    tempOff = server.arg("temp_off").toFloat();
+    newTempOff = server.arg("temp_off").toFloat();
     changed = true;
   }
 
   if (changed) {
-    if (tempOff >= tempOn) {
+    if (newTempOff >= newTempOn) {
       server.send(400, "application/json",
         "{\"error\":\"temp_off muss kleiner als temp_on sein\"}");
       return;
     }
+    tempOn = newTempOn;
+    tempOff = newTempOff;
     saveThresholds(tempOn, tempOff);
   }
 
