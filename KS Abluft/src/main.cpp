@@ -51,6 +51,8 @@ Preferences prefs;
 float tempOn  = DEFAULT_TEMP_ON;
 float tempOff = DEFAULT_TEMP_OFF;
 float currentTemp = NAN;
+float minTemp = NAN;
+float maxTemp = NAN;
 float currentHumidity = NAN;
 bool fanState = false;
 bool sensorOk = false; // wird in setup() gesetzt, falls SHT31 beim Start gefunden wurde
@@ -88,6 +90,12 @@ void updateTemperatureAndFan() {
 
   currentTemp = t;
   currentHumidity = h;
+  if (isnan(minTemp) || currentTemp < minTemp) {
+    minTemp = currentTemp;
+  }
+  if (isnan(maxTemp) || currentTemp > maxTemp) {
+    maxTemp = currentTemp;
+  }
 
   // Hysterese: EIN bei Überschreiten tempOn, AUS bei Unterschreiten tempOff
   if (!fanState && currentTemp >= tempOn) {
@@ -103,11 +111,21 @@ void updateTemperatureAndFan() {
 
 // ---------- HTTP: GET /status ----------
 void handleStatus() {
-  StaticJsonDocument<256> doc;
+  StaticJsonDocument<384> doc;
   if (isnan(currentTemp)) {
     doc["abluft_temp"] = nullptr;
   } else {
     doc["abluft_temp"] = (double)currentTemp;
+  };
+  if (isnan(minTemp)) {
+    doc["abluft_temp_min"] = nullptr;
+  } else {
+    doc["abluft_temp_min"] = (double)minTemp;
+  };
+  if (isnan(maxTemp)) {
+    doc["abluft_temp_max"] = nullptr;
+  } else {
+    doc["abluft_temp_max"] = (double)maxTemp;
   };
   if (isnan(currentHumidity)) {
     doc["abluft_humidity"] = nullptr;

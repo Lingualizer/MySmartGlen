@@ -17,6 +17,10 @@ def check_number(value, name):
         raise AssertionError(f"{name} must be a number, got {value!r}")
 
 
+def format_temperature(value):
+    return "nicht verfuegbar" if value is None else f"{value:.2f} C"
+
+
 def run_checks(base_url):
     base_url = base_url.rstrip("/")
 
@@ -29,14 +33,34 @@ def run_checks(base_url):
 
     status_code, status = get_json(f"{base_url}/status")
     assert status_code == 200, f"GET /status returned HTTP {status_code}"
-    for key in ("abluft_temp", "abluft_humidity"):
+    for key in (
+        "abluft_temp",
+        "abluft_temp_min",
+        "abluft_temp_max",
+        "abluft_humidity",
+    ):
         value = status.get(key)
         if value is not None:
             check_number(value, key)
     assert isinstance(status.get("fan_state"), bool), "fan_state must be boolean"
     check_number(status.get("temp_on"), "status.temp_on")
     check_number(status.get("temp_off"), "status.temp_off")
-    print("PASS GET /status returns sensor and fan state")
+    current = status["abluft_temp"]
+    minimum = status["abluft_temp_min"]
+    maximum = status["abluft_temp_max"]
+    assert (minimum is None) == (maximum is None), "Only one temperature extreme is available"
+    if current is not None:
+        assert minimum is not None, "Temperature extrema are missing after a measurement"
+        assert minimum <= current <= maximum, "Current temperature is outside min/max"
+    fan_text = "EIN" if status["fan_state"] else "AUS"
+    print(
+        "PASS /status: aktuell {}, min {}, max {}, Luefter {}".format(
+            format_temperature(current),
+            format_temperature(minimum),
+            format_temperature(maximum),
+            fan_text,
+        )
+    )
 
     invalid_url = f"{base_url}/config?{urlencode({'temp_off': config['temp_on']})}"
     try:
