@@ -18,7 +18,13 @@
  *   nicht Teil der ursprünglichen Anforderung).
  */
 
+#if __has_include(<Arduino.h>)
 #include <Arduino.h>
+#elif __has_include(<WProgram.h>)
+#include <WProgram.h>
+#else
+#error "Arduino core headers are unavailable; configure this project with an Arduino-compatible PlatformIO environment."
+#endif
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Preferences.h>
@@ -27,8 +33,8 @@
 #include <ArduinoJson.h>
 
 // ---------- WLAN Zugangsdaten (Variante A: fest im Code) ----------
-const char* WIFI_SSID     = "Travelingualizer";
-const char* WIFI_PASSWORD = "L1@n3P3t3r";
+const char* WIFI_SSID     = "DIGIFIBRA-LiPe";
+const char* WIFI_PASSWORD = "Wl@nL14n3P3t3r";
 
 // ---------- Pin-Belegung ----------
 #define I2C_SDA        21   // SHT31 Datenleitung (I2C)
@@ -40,8 +46,8 @@ const char* WIFI_PASSWORD = "L1@n3P3t3r";
 // ---------- Hysterese Default-Werte (nur falls NVS leer) ----------
 // ANNAHME, nicht validiert: Startwerte, bis reale Messwerte
 // (Oberflächentemperatur unter Sonneneinstrahlung) vorliegen.
-#define DEFAULT_TEMP_ON   45.0f   // Lüfter EIN ab dieser Temperatur
-#define DEFAULT_TEMP_OFF  35.0f   // Lüfter AUS unterhalb dieser Temperatur
+#define DEFAULT_TEMP_ON   30.0f   // Lüfter EIN ab dieser Temperatur
+#define DEFAULT_TEMP_OFF  25.0f   // Lüfter AUS unterhalb dieser Temperatur
 
 // ---------- Globale Objekte ----------
 Adafruit_SHT31 sht31 = Adafruit_SHT31();
@@ -78,10 +84,9 @@ void saveThresholds(float onVal, float offVal) {
 
 // ---------- Temperatur/Feuchte messen + Lüfterlogik ----------
 void updateTemperatureAndFan() {
-  float t = sht31.readTemperature();
-  float h = sht31.readHumidity();
-
-  if (isnan(t) || isnan(h)) {
+  float t;
+  float h;
+  if (!sht31.readBoth(&t, &h)) {
     // Sensor nicht erreichbar - Lüfter aus Sicherheitsgründen NICHT
     // automatisch abschalten, aber Fehler klar signalisieren.
     Serial.println("Fehler: SHT31 nicht erreichbar!");
@@ -186,14 +191,25 @@ void setup() {
   loadThresholds();
 
   Wire.begin(I2C_SDA, I2C_SCL);
-  sensorOk = sht31.begin(SHT31_I2C_ADDR);
+Serial.println("I2C scan:");
+bool found = false;
+for (uint8_t address = 1; address < 127; ++address) {
+  Wire.beginTransmission(address);
+  if (Wire.endTransmission() == 0) {
+    Serial.printf("I2C-Geraet gefunden: 0x%02X\n", address);
+    found = true;
+  }
+}
+if (!found) {
+  Serial.println("Keine I2C-Geraete gefunden");
+}
+ sensorOk = sht31.begin(SHT31_I2C_ADDR);
   if (!sensorOk) {
     Serial.println("Fehler: SHT31 beim Start nicht gefunden! Pruefe Verkabelung/I2C-Adresse.");
   }
-
   // WLAN verbinden (feste Zugangsdaten)
   WiFi.mode(WIFI_STA);
-  WiFi.begin("Travelingualizer", "L1@n3P3t3r");
+  WiFi.begin("DIGIFIBRA-LiPe", "Wl@nL14n3P3t3r");
   Serial.print("Verbinde mit WLAN");
   unsigned long start = millis();
   while (WiFi.status() != WL_CONNECTED && millis() - start < 15000) {
