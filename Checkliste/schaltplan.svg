@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-labelledby="title description">
+  <title id="title">Schaltplan Abfahrts-Checkliste</title>
+  <desc id="description">Verdrahtung eines ESP32 DevKit mit einem Waveshare 2.9 Zoll e-Paper V2 und drei Tastern.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e8edf0" stroke-width="1"/>
+    </pattern>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #17212b; }
+      .title { font-size: 30px; font-weight: 700; }
+      .subtitle { font-size: 15px; fill: #596875; }
+      .board-title { font-size: 18px; font-weight: 700; }
+      .small { font-size: 13px; fill: #596875; }
+      .pin { font-size: 14px; font-weight: 600; }
+      .wire-label { font-size: 12px; font-weight: 700; }
+      .card { fill: #ffffff; stroke: #aebbc4; stroke-width: 2; }
+      .wire { fill: none; stroke-width: 3; stroke-linecap: round; }
+      .terminal { fill: #ffffff; stroke-width: 3; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="780" fill="#f8fafb"/>
+  <rect width="1200" height="780" fill="url(#grid)"/>
+  <text class="title" x="60" y="62">Abfahrts-Checkliste</text>
+  <text class="subtitle" x="60" y="91">Verdrahtung · ESP32 DevKit + Waveshare 2.9-inch e-Paper V2</text>
+
+  <rect class="card" x="60" y="125" width="375" height="390" rx="8"/>
+  <text class="board-title" x="88" y="163">ESP32 DevKit</text>
+  <text class="small" x="88" y="185">3.3-V-Logik · Arduino / PlatformIO</text>
+
+  <rect class="card" x="765" y="125" width="375" height="390" rx="8"/>
+  <text class="board-title" x="790" y="163">Waveshare 2.9-inch V2</text>
+  <text class="small" x="790" y="185">Schwarz-weiss · SSD1680 · 296 x 128</text>
+  <rect x="955" y="205" width="150" height="92" rx="3" fill="#f1f4f5" stroke="#73818b" stroke-width="2"/>
+  <path d="M970 224h120M970 240h95M970 256h110M970 272h72" stroke="#a2adb4" stroke-width="3"/>
+  <text class="small" x="981" y="318">E-Paper</text>
+
+  <g class="wire" stroke="#d64045">
+    <path d="M435 220H765"/>
+  </g>
+  <g class="wire" stroke="#45545f">
+    <path d="M435 255H765"/>
+  </g>
+  <g class="wire" stroke="#2374ab">
+    <path d="M435 290H765"/>
+  </g>
+  <g class="wire" stroke="#278c83">
+    <path d="M435 325H765"/>
+  </g>
+  <g class="wire" stroke="#7057a3">
+    <path d="M435 360H765"/>
+  </g>
+  <g class="wire" stroke="#d17a22">
+    <path d="M435 395H765"/>
+  </g>
+  <g class="wire" stroke="#bd536f">
+    <path d="M435 430H765"/>
+  </g>
+  <g class="wire" stroke="#49804e">
+    <path d="M435 465H765"/>
+  </g>
+
+  <g>
+    <circle class="terminal" cx="435" cy="220" r="5" stroke="#d64045"/>
+    <circle class="terminal" cx="435" cy="255" r="5" stroke="#45545f"/>
+    <circle class="terminal" cx="435" cy="290" r="5" stroke="#2374ab"/>
+    <circle class="terminal" cx="435" cy="325" r="5" stroke="#278c83"/>
+    <circle class="terminal" cx="435" cy="360" r="5" stroke="#7057a3"/>
+    <circle class="terminal" cx="435" cy="395" r="5" stroke="#d17a22"/>
+    <circle class="terminal" cx="435" cy="430" r="5" stroke="#bd536f"/>
+    <circle class="terminal" cx="435" cy="465" r="5" stroke="#49804e"/>
+    <circle class="terminal" cx="765" cy="220" r="5" stroke="#d64045"/>
+    <circle class="terminal" cx="765" cy="255" r="5" stroke="#45545f"/>
+    <circle class="terminal" cx="765" cy="290" r="5" stroke="#2374ab"/>
+    <circle class="terminal" cx="765" cy="325" r="5" stroke="#278c83"/>
+    <circle class="terminal" cx="765" cy="360" r="5" stroke="#7057a3"/>
+    <circle class="terminal" cx="765" cy="395" r="5" stroke="#d17a22"/>
+    <circle class="terminal" cx="765" cy="430" r="5" stroke="#bd536f"/>
+    <circle class="terminal" cx="765" cy="465" r="5" stroke="#49804e"/>
+  </g>
+
+  <g class="pin">
+    <text x="90" y="225">3V3</text>
+    <text x="90" y="260">GND</text>
+    <text x="90" y="295">GPIO 18 · SCK</text>
+    <text x="90" y="330">GPIO 23 · MOSI</text>
+    <text x="90" y="365">GPIO 5 · CS</text>
+    <text x="90" y="400">GPIO 17 · DC</text>
+    <text x="90" y="435">GPIO 16 · RST</text>
+    <text x="90" y="470">GPIO 4 · BUSY</text>
+    <text x="790" y="225">VCC</text>
+    <text x="790" y="260">GND</text>
+    <text x="790" y="295">CLK</text>
+    <text x="790" y="330">DIN</text>
+    <text x="790" y="365">CS</text>
+    <text x="790" y="400">DC</text>
+    <text x="790" y="435">RST</text>
+    <text x="790" y="470">BUSY</text>
+  </g>
+
+  <g text-anchor="middle">
+    <rect x="578" y="204" width="80" height="22" rx="4" fill="#ffffff"/>
+    <text class="wire-label" x="618" y="219" fill="#d64045">3.3 V</text>
+    <rect x="578" y="239" width="80" height="22" rx="4" fill="#ffffff"/>
+    <text class="wire-label" x="618" y="254" fill="#45545f">GND</text>
+    <rect x="570" y="274" width="96" height="22" rx="4" fill="#ffffff"/>
+    <text class="wire-label" x="618" y="289" fill="#2374ab">SCK / CLK</text>
+    <rect x="570" y="309" width="96" height="22" rx="4" fill="#ffffff"/>
+    <text class="wire-label" x="618" y="324" fill="#278c83">SPI MOSI</text>
+    <rect x="578" y="344" width="80" height="22" rx="4" fill="#ffffff"/>
+    <text class="wire-label" x="618" y="359" fill="#7057a3">CS</text>
+    <rect x="578" y="379" width="80" height="22" rx="4" fill="#ffffff"/>
+    <text class="wire-label" x="618" y="394" fill="#d17a22">DC</text>
+    <rect x="578" y="414" width="80" height="22" rx="4" fill="#ffffff"/>
+    <text class="wire-label" x="618" y="429" fill="#bd536f">RST</text>
+    <rect x="578" y="449" width="80" height="22" rx="4" fill="#ffffff"/>
+    <text class="wire-label" x="618" y="464" fill="#49804e">BUSY</text>
+  </g>
+
+  <rect class="card" x="60" y="545" width="650" height="185" rx="8"/>
+  <text class="board-title" x="88" y="582">Bedientasten · Schliesser gegen GND</text>
+  <text class="small" x="88" y="605">Jeder Taster verbindet seinen GPIO beim Druecken mit Masse.</text>
+
+  <g class="pin">
+    <text x="92" y="640">GPIO 33 · Hoch</text>
+    <text x="92" y="675">GPIO 32 · Runter</text>
+    <text x="92" y="710">GPIO 25 · Auswahl</text>
+  </g>
+  <g class="wire" stroke="#354550">
+    <path d="M225 635H345M390 635H500M225 670H345M390 670H500M225 705H345M390 705H500"/>
+    <path d="M345 635l27-15M345 670l27-15M345 705l27-15"/>
+    <path d="M500 635v70"/>
+  </g>
+  <g fill="#354550">
+    <circle cx="345" cy="635" r="4"/>
+    <circle cx="390" cy="635" r="4"/>
+    <circle cx="345" cy="670" r="4"/>
+    <circle cx="390" cy="670" r="4"/>
+    <circle cx="345" cy="705" r="4"/>
+    <circle cx="390" cy="705" r="4"/>
+  </g>
+  <path d="M485 705h30M490 712h20M496 719h8" fill="none" stroke="#354550" stroke-width="3"/>
+  <text class="small" x="525" y="681">gemeinsame Masse</text>
+
+  <rect class="card" x="735" y="545" width="405" height="185" rx="8"/>
+  <text class="board-title" x="763" y="582">Hinweise</text>
+  <text class="pin" x="763" y="615">3.3 V am e-Paper, niemals 5 V.</text>
+  <text class="pin" x="763" y="642">Alle GND-Anschluesse verbinden.</text>
+  <text class="pin" x="763" y="669">Taster: INPUT_PULLUP, gedrueckt = LOW.</text>
+  <text class="pin" x="763" y="696">MISO wird nicht verwendet.</text>
+
+  <text class="small" x="60" y="760">Verdrahtung gemaess Checkliste/src/main.cpp · GPIO-Belegung bei Aenderungen dort und hier gemeinsam aktualisieren.</text>
+</svg>

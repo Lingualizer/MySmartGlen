@@ -31,6 +31,9 @@
 		{
 			"name": "VE.Direkt Solar",
 			"path": "VE.Direkt Solar"
+		},
+		{
+			"path": "Checkliste"
 		}
 	],
 	"settings": {}
