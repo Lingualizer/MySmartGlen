@@ -26,8 +26,10 @@
 #include <WebServer.h>
 #include <ArduinoJson.h>
 
-const char* WIFI_SSID     = "Travelingualizer";
-const char* WIFI_PASSWORD = "L1@n3P3t3r";
+// const char* WIFI_SSID     = "Travelingualizer";
+// const char* WIFI_PASSWORD = "L1@n3P3t3r";
+const char* WIFI_SSID     = "DIGIFIBRA-LiPe";
+const char* WIFI_PASSWORD = "Wl@nL14n3P3t3r";
 
 // ---------- Pin-Belegung (ANNAHME, siehe Kommentar oben) ----------
 #define PIN_SENSOR1 4   // Sensor 1
@@ -85,6 +87,12 @@ void setup() {
   pinMode(PIN_SENSOR2, INPUT);
   pinMode(PIN_SENSOR3, INPUT);
 
+  WiFi.onEvent([](WiFiEvent_t event, WiFiEventInfo_t info) {
+    if (event == ARDUINO_EVENT_WIFI_STA_DISCONNECTED) {
+      Serial.printf("WLAN-Abbruchgrund: %u\n", info.wifi_sta_disconnected.reason);
+    }
+  });
+
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Verbinde mit WLAN");
   unsigned long start = millis();
@@ -101,6 +109,7 @@ void setup() {
     Serial.println(WiFi.macAddress());
   } else {
     Serial.println("WLAN-Verbindung fehlgeschlagen -- Sensor-Test");
+    Serial.printf("WLAN-Statuscode: %d\n", WiFi.status());
     Serial.println("laeuft trotzdem lokal per Serial-Monitor weiter.");
   }
 
