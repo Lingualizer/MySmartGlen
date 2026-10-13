@@ -26,10 +26,10 @@
 #include <WebServer.h>
 #include <ArduinoJson.h>
 
-// const char* WIFI_SSID     = "Travelingualizer";
-// const char* WIFI_PASSWORD = "L1@n3P3t3r";
-const char* WIFI_SSID     = "DIGIFIBRA-LiPe";
-const char* WIFI_PASSWORD = "Wl@nL14n3P3t3r";
+const char* WIFI_SSID     = "Travelingualizer";
+const char* WIFI_PASSWORD = "L1@n3P3t3r";
+// const char* WIFI_SSID     = "DIGIFIBRA-LiPe";
+// const char* WIFI_PASSWORD = "Wl@nL14n3P3t3r";
 
 // ---------- Pin-Belegung (ANNAHME, siehe Kommentar oben) ----------
 #define PIN_SENSOR1 4   // Sensor 1
